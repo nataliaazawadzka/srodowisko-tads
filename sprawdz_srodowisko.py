@@ -11,7 +11,7 @@ def wersja_polecenia(polecenie):
     """Zwraca pierwszy wiersz wyniku polecenia albo None, gdy brak programu."""
     if shutil.which(polecenie[0]) is None:
         return None
-    wynik = subprocess.run(polecenie, capture_output=True, text=True)
+    wynik = subprocess.run(polecenie, check=False, capture_output=True, text=True)
     tresc = (wynik.stdout + wynik.stderr).strip().splitlines()
     return tresc[0] if tresc else ""
 
