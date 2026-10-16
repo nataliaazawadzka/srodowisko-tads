@@ -1,3 +1,4 @@
+# wersja 1.1
 """Sprawdzenie poprawnosci przygotowania srodowiska pracy (cwiczenia 1)."""
 import platform
 import shutil
