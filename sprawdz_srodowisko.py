@@ -1,4 +1,4 @@
-# # Podsumowanie sprawdzen
+# Podsumowanie i raport sprawdzen srodowiska
 """Sprawdzenie poprawnosci przygotowania srodowiska pracy (cwiczenia 1)."""
 import platform
 import shutil
@@ -71,4 +71,14 @@ def main():
 
 
 if __name__ == "__main__":
+    def oblicz_srednia(liczby):
+        if not liczby:
+            return 0.0
+        suma=sum(liczby)
+        licznik=len(liczby)
+        return suma/licznik
+    pusta_lista=[]
+    wynik=oblicz_srednia(pusta_lista)
+    print(f"wynik {wynik}")
+
     sys.exit(main())
