@@ -15,13 +15,15 @@ def kpi_html():
     region = request.args.get("region")
     regiony = dostepne_regiony(SCIEZKA_DANYCH)
 
-    if region not in regiony:
+    # Sprawdzenie błędu 404 tylko wtedy, gdy parametr 'region' został jawnie podany
+    if region is not None and region not in regiony:
         abort(404, description=f"Nieznany region: {region}")
 
     wskazniki = policz_wskazniki(SCIEZKA_DANYCH, region)
     marza = wskazniki["marza"]
+    etykieta = region if region is not None else "Wszystkie"
 
-    return f"<h1>Wskaźniki: {region}</h1><p>Marża: {marza:.2%}</p>"
+    return f"<h1>Wskaźniki: {etykieta}</h1><p>Marża: {marza:.2%}</p>"
 
 
 @app.get("/api/kpi")
@@ -29,7 +31,8 @@ def kpi_api():
     region = request.args.get("region")
     regiony = dostepne_regiony(SCIEZKA_DANYCH)
 
-    if region not in regiony:
+    # Identyczna walidacja dla API
+    if region is not None and region not in regiony:
         abort(404, description=f"Nieznany region: {region}")
 
     wskazniki = policz_wskazniki(SCIEZKA_DANYCH, region)
