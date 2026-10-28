@@ -32,7 +32,7 @@ def kpi():
 
 
 @panel_bp.get("/regiony/<region:kod>")
-def region_widok(kod):
+def region(kod):
     sciezka = current_app.config["SCIEZKA_DANYCH"]
     regiony = dostepne_regiony(sciezka)
     
