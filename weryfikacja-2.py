@@ -212,7 +212,7 @@ def _():
 @sprawdzenie(2, "validators.py: funkcja parametr_int")
 def _():
     plik_istnieje("app/validators.py")
-    modul = importlib.import_module("app.walidacja")
+    modul = importlib.import_module("app.validators")
     return callable(getattr(modul, "parametr_int", None)), "parametr_int"
 
 

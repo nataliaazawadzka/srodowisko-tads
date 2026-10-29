@@ -1,5 +1,7 @@
 from flask import Blueprint, abort, current_app, jsonify, request
-from .services import dostepne_regiony, policz_wskazniki
+from app.validators import parametr_int
+from app.decorators import wymagany_parametr
+from .services import dostepne_regiony, policz_wskazniki, raporty_roku
 
 api_bp = Blueprint("api", __name__)
 
@@ -15,3 +17,9 @@ def kpi():
 
     wskazniki = policz_wskazniki(sciezka, region)
     return jsonify(wskazniki)
+
+@api_bp.get("/raporty")
+@wymagany_parametr("rok")
+def raporty():
+    rok = parametr_int("rok", 2020, 2030)
+    return jsonify(rok=rok, raporty=raporty_roku(rok))
