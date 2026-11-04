@@ -1,5 +1,6 @@
 from flask import Blueprint, abort, current_app, request, redirect, url_for, render_template
 from .services import dostepne_regiony, policz_wskazniki, zapisz_raport, raporty_roku, zestawienie_regionow
+from datetime import date
 
 panel_bp = Blueprint("panel", __name__)
 
@@ -27,7 +28,7 @@ def kpi():
         "panel.html",
         wskazniki=wskazniki,
         zestawienie=zestawienie_regionow(sciezka),
-        regiony=dostepne_regiony(sciezka)
+        dzisiaj=date.today()
     )
 
 
@@ -45,7 +46,7 @@ def region(kod):
         "panel.html",
         wskazniki=wskazniki,
         zestawienie=zestawienie_regionow(sciezka),
-        regiony=dostepne_regiony(sciezka)
+        dzisiaj=date.today()
     )
 
 
