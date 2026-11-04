@@ -1,5 +1,5 @@
-from flask import Blueprint, abort, current_app, request, redirect, url_for
-from .services import dostepne_regiony, policz_wskazniki, zapisz_raport, raporty_roku
+from flask import Blueprint, abort, current_app, request, redirect, url_for, render_template
+from .services import dostepne_regiony, policz_wskazniki, zapisz_raport, raporty_roku, zestawienie_regionow
 
 panel_bp = Blueprint("panel", __name__)
 
@@ -21,27 +21,32 @@ def kpi():
         abort(404, description=f"Nieznany region: {region}")
 
     wskazniki = policz_wskazniki(sciezka, region)
+    current_app.logger.info("Obliczono wskaźniki dla regionu %s", wskazniki["region"])
 
-    current_app.logger.info(
-        "Obliczono wskaźniki dla regionu %s", wskazniki["region"]
+    return render_template(
+        "panel.html",
+        wskazniki=wskazniki,
+        zestawienie=zestawienie_regionow(sciezka),
+        regiony=dostepne_regiony(sciezka)
     )
-
-    marza = wskazniki["marza"]
-    etykieta = region if region is not None else "Wszystkie"
-    return f"<h1>Wskaźniki: {etykieta}</h1><p>Marża: {marza:.2%}</p>"
 
 
 @panel_bp.get("/regiony/<region:kod>")
 def region(kod):
     sciezka = current_app.config["SCIEZKA_DANYCH"]
     regiony = dostepne_regiony(sciezka)
-    
-    # Konwerter wpuścił np. 'XX', ale sprawdzamy czy istnieje w bazie/słowniku
+
     if kod not in regiony:
         abort(404, description=f"Nieznany region: {kod}")
-    
-    zamowienia = regiony[kod] if isinstance(regiony, dict) else 3
-    return f"<h1>Region {kod}</h1><p>Zamówień: {zamowienia}</p>"
+
+    wskazniki = policz_wskazniki(sciezka, kod)
+
+    return render_template(
+        "panel.html",
+        wskazniki=wskazniki,
+        zestawienie=zestawienie_regionow(sciezka),
+        regiony=dostepne_regiony(sciezka)
+    )
 
 
 @panel_bp.get("/raporty/", defaults={"rok": ROK_DOMYSLNY})
